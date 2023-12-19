@@ -2,9 +2,13 @@ package com.macedo.dto.mapper;
 
 import com.macedo.enums.Category;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 import com.macedo.dto.CourseDTO;
+import com.macedo.dto.LessonDTO;
 import com.macedo.model.Course;
 
 @Component
@@ -14,8 +18,13 @@ public class CourseMapper {
         if (course == null) {
             return null;
         }
+        List<LessonDTO> lessons = course.getLessons()
+                .stream()
+                .map(lesson -> new LessonDTO(lesson.getId(), lesson.getName(), lesson.getYoutubeUrl()))
+                .collect(Collectors.toList());
+
         return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue(),
-                course.getLessons());
+                lessons);
     }
 
     public Course toEntity(CourseDTO courseDTO) {
