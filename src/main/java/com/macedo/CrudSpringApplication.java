@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.macedo.enums.Category;
 import com.macedo.model.Course;
+import com.macedo.model.Lesson;
 import com.macedo.repository.CourseRepository;
 
 @SpringBootApplication
@@ -23,7 +24,11 @@ public class CrudSpringApplication {
 			Course c =  new Course();
 			c.setName("Angular");
 			c.setCategory(Category.FRONT_END);
-
+			Lesson l = new Lesson();
+			l.setName("Curso Angular");
+			l.setYoutubeUrl("https://youtu.be/Nb4uxLxdvxo?si=oqaCXuSs2gPDBvIH");
+			l.setCourse(c);
+			c.getLessons().add(l);
 			courseRepository.save(c);
 		};
 	}
