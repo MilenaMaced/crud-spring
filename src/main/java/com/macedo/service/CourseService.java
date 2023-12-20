@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.macedo.dto.CourseDTO;
 import com.macedo.dto.mapper.CourseMapper;
 import com.macedo.exception.RecordNotFoundException;
+import com.macedo.model.Course;
 import com.macedo.repository.CourseRepository;
 
 @Service
@@ -35,12 +36,19 @@ public class CourseService {
         return courseMapper.toDTO(courseRepository.save(courseMapper.toEntity(course)));
     }
 
-    public CourseDTO update(Long id, CourseDTO course) {
+    public CourseDTO update(Long id, CourseDTO courseDTO) {
         return courseRepository.findById(id)
                 .map(recordFound -> {
-                    recordFound.setName(course.name());
-                    recordFound.setCategory(courseMapper.convertCategoryValue(course.category()));
+                    Course course = courseMapper.toEntity(courseDTO);
+
+                    recordFound.setName(courseDTO.name());
+                    recordFound.setCategory(courseMapper.convertCategoryValue(courseDTO.category()));
+                    recordFound.getLessons().clear();
+
+                    course.getLessons().forEach(recordFound.getLessons()::add);
+
                     return courseMapper.toDTO(courseRepository.save(recordFound));
+
                 }).orElseThrow(() -> new RecordNotFoundException(id));
 
     }
