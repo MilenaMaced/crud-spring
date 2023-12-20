@@ -15,29 +15,33 @@ public class CrudSpringApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CrudSpringApplication.class, args);
-		
+
 	}
+
 	@Bean
-	CommandLineRunner initDatabase( CourseRepository courseRepository){
+	CommandLineRunner initDatabase(CourseRepository courseRepository) {
 		return args -> {
 			courseRepository.deleteAll();
-			Course c =  new Course();
-			c.setName("Angular");
-			c.setCategory(Category.FRONT_END); 
+			for (int i = 0; i < 20; i++) {
 
-			Lesson l1 = new Lesson();
-			l1.setName("Aula 1");
-			l1.setYoutubeUrl("https://youtu.be/Nb4uxLxdvxo?si=oqaCXuSs2gPDBvIH");
-			l1.setCourse(c);
-			c.getLessons().add(l1);
+				Course c = new Course();
+				c.setName("Angular com Spring " + i);
+				c.setCategory(Category.BACK_END);
 
-			Lesson l2 = new Lesson();
-			l2.setName("Aula 2");
-			l2.setYoutubeUrl("https://youtu.be/Nb4uxLxdvxo?si=oqaCXuSs2gPDBvIH");
-			l2.setCourse(c);
-			c.getLessons().add(l2);
+				Lesson l = new Lesson();
+				l.setName("Introdução");
+				l.setYoutubeUrl("01234567890");
+				l.setCourse(c);
+				c.getLessons().add(l);
 
-			courseRepository.save(c);
+				Lesson l1 = new Lesson();
+				l1.setName("Angular");
+				l1.setYoutubeUrl("01234567891");
+				l1.setCourse(c);
+				c.getLessons().add(l1);
+
+				courseRepository.save(c);
+			}
 		};
 	}
 }

@@ -1,17 +1,20 @@
 package com.macedo.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.macedo.dto.CourseDTO;
+import com.macedo.dto.CoursePageDTO;
 import com.macedo.service.CourseService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -36,8 +39,9 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<CourseDTO> list() {
-        return courseService.list();
+    public CoursePageDTO list(@RequestParam(defaultValue = "0") @PositiveOrZero int page,
+            @RequestParam(defaultValue = "10") @Positive @Max(100) int pageSize) {
+        return courseService.list(page, pageSize);
     }
 
     @GetMapping("/{id}")
